@@ -1,0 +1,9 @@
+<article class="post">
+  <h1> {{ post.meta.title }}</h1>
+  {{ post.content }}
+
+  <footer>
+    <p>Category: {{ post.meta.category }}</p>
+    {% if post.meta.fruitbat is defined %}<p>Fruitbat:   {{ post.meta.fruitbat }}</p> {% endif %}
+  </footer>
+</article>

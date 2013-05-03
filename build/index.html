@@ -1,0 +1,202 @@
+<!doctype html>
+<html>
+  <head>
+    
+    <link rel="stylesheet" href="/static/style.css">
+    
+    
+    
+    <script type="text/javascript" src="//use.typekit.net/vio0gns.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    
+    <title>
+  Pyblog -- Journey into Madness
+  </title>
+    
+  </head>
+<body>
+  <div class="content">
+    
+  
+    <article class="post">
+  <h1> The Wonderful World of Clases</h1>
+  <p>Still trying to understand Python classes. Getting a little closer:
+<a href="http://stackoverflow.com/a/8609238/1048479">summary</a></p>
+
+<p>```Python</p>
+
+<h1>A simple class</h1>
+
+<p>class Dog:
+    def <strong>init</strong>(self, legs, color):
+        self.legs = legs
+        self.color = color</p>
+
+<pre><code>def bark(self):
+    return "woof,  I'm a %s colored dog with %s legs" % (self.color, self.legs)
+</code></pre>
+
+<p>fido = Dog(4, 'brown')</p>
+
+<p>print(fido.bark())</p>
+
+<p>class Shitzu(Dog):
+    def barf(self):
+        return 'Bluaghhh'</p>
+
+<p>ringo = Shitzu(4,'blue')  # &lt;-- how does this assignment work if we add extra parameters in a class?
+print('%s : %s' % (ringo.bark(), ringo.barf()))
+```</p>
+
+
+  <footer>
+    <p>Category: It's A category from the post!</p>
+    <p>Fruitbat:   FRUITBAT</p> 
+  </footer>
+</article>
+  
+    <article class="post">
+  <h1> </h1>
+  <p>Yep. This <strong>is</strong> pretty cool.</p>
+
+<h1>Heading 1, what now?</h1>
+
+<h2>Heading 2!</h2>
+
+<p>Some code:</p>
+
+<p><code>
+  Some Code
+</code></p>
+
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et mollitia voluptatem ex aperiam molestiae laboriosam hic consectetur eos quaerat esse eaque cumque perferendis debitis vitae odit inventore earum. Nostrum ipsum!</p>
+
+<p>Some HTML:</p>
+
+<p>Block level bare </p>
+
+<div class="interloper">
+  <p><span>Nested HTML</span></p>
+</div>
+
+
+  <footer>
+    <p>Category: </p>
+    
+  </footer>
+</article>
+  
+    <article class="post">
+  <h1> Access python version info</h1>
+  <p>import sys</p>
+
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <p>print(sys.version<em>info)
+      sys.version</em>info(major=3, minor=3, micro=0, releaselevel='final', serial=0)</p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<h1>check if greater than 3.0</h1>
+
+<p>if sys.version_info &gt; (3,0):
+  print('watch yo syntax homie.')</p>
+
+
+  <footer>
+    <p>Category: quick_tips</p>
+    
+  </footer>
+</article>
+  
+    <article class="post">
+  <h1> </h1>
+  <p>Ah testing. Such a lovely idea; such a simple idea. Unfortunately it is not as easy to start as a beginner.</p>
+
+<p>Python's built in UnitTest module seems a wonderful start, until you run into issues with modules and importing.
+It seem like this is not an easy concept, by the number of Posts on stackoverflow. I'm still struggling with it myself,</p>
+
+<p>The options are:</p>
+
+<ul>
+<li><a href="http://stackoverflow.com/a/714647/1048479">#1 Use relative imports</a> <code>from ... import foo</code> (only works within a package, did not work with nose)</li>
+<li><p><a href="http://stackoverflow.com/a/11158224/1048479">#2 Alter the system path</a>:</p>
+
+<p><code>
+import os,sys
+parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0,parentdir)
+import mymodule
+</code></p></li>
+<li><a href="http://stackoverflow.com/a/3073368/1048479">#3 Remove the <strong>init</strong>.py and just use import</a>. This is for simpler non-package testing. Still trying to figure out what the detriment is.</li>
+</ul>
+
+<h1>Printing with Nose</h1>
+
+<p><code>nosetests --nocapture</code> will allow print() output to show up in your testing logs. Useful for beginners like me. This can be speicfied in a global noseconfig file in your HOME directory. @todo: create nose file :)</p>
+
+<h2>Note, don't be stupid like me</h2>
+
+<p>I was further struggling with imports within my package, when I realized that my directory name contained dashes (<code>my-cool-folder</code>) which is a no-no as far as Python is concerned. Changing the dashes to underscores cleared up those issues. Only took a day to figure out :)</p>
+
+<h2>Big Ol' List of helpful threads</h2>
+
+<ul>
+<li><a href="http://stackoverflow.com/questions/61151/where-do-the-python-unit-tests-go">#1 Where do the Python Unit Tests go?</a></li>
+<li><a href="http://stackoverflow.com/questions/279237/python-import-a-module-from-a-folder?rq=1">#2 Import Module from a Folder</a></li>
+<li><a href="http://stackoverflow.com/questions/714063/python-importing-modules-from-parent-folder?rq=1">#3 (mentions 4 methods!) Importing modules from parent folder </a></li>
+</ul>
+
+
+  <footer>
+    <p>Category: </p>
+    
+  </footer>
+</article>
+  
+    <article class="post">
+  <h1> two minute guide to virtual environments in python</h1>
+  <p>I approached virtual environments with the same attitude I originally aprroached VCS's like Git: distrust. But, after experiencing the freedom to mix and match packages and package versions without the fear of conflicts, and to deploy easily to platforms like Heroku, I can't start a project without them.</p>
+
+<h1>Gettting up and running</h1>
+
+<p>First of all, if you do not have <a href="https://pypi.python.org/pypi/pip">PyPi / Pip</a> installed, you should go and do so. It makes installing python packages easy and fun, and conjures up memories of <a href="https://en.wikipedia.org/wiki/Charles_Dickens">Charles Dickens</a>. Don't tell anyone, but Sometimes I say the package names in English accents for fun when I install them with Pip.</p>
+
+<p>To make a long story short, you should use <a href="https://github.com/brainsik/virtualenv-burrito">virtualenvburrito</a>. It's the simplest way to get up and running, and has a lot of nerd cred right now so you can feel cool about yourself (I did). It will install <a href="http://www.virtualenv.org/en/latest/">virtualenv</a> and <a href="https://bitbucket.org/dhellmann/virtualenvwrapper">virtualenvwrapper</a> in one easy shell command. Due not that if you <strong>do</strong> have virtualenv installed already, you may want to manually install virtualenvwrapper yourself; i've done it both ways without a noticeable difference, but better safe than sorry : )</p>
+
+<h1>Cheat Sheet:</h1>
+
+<ul>
+<li><p>Creating a new Virtual Environment
+-- <code>mkvirtualenv &lt;env-name&gt;</code></p></li>
+<li><p>Switching environemnt
+-- <code>workon &lt;env-name&gt;</code></p></li>
+<li><p>Checking packages
+-- <code>lssitepackages</code></p></li>
+<li><p>Exporting packages
+-- <code>lssitepackages &gt; requirements.txt</code>
+-- To use in another environment:
+--- <code>makvirtualenv &lt;env-name&gt; -r path/to/requirements.txt</code></p></li>
+</ul>
+
+<h1>Rant</h1>
+
+<p>Virtualenv wrapper is fantastic, it takes a lot of the ho-hum out of virtualenv, and makes switching and starting projects a snap. My major beef with it is the way it uses entirely different commands to perform it's major functions. Why I need to remember <code>lssitepackages</code> instead of using <code>venvwrapper ls</code> is beyond me. A short rant, but that's because venv wrapper is such a fantastic tool.</p>
+
+
+  <footer>
+    <p>Category: nuts and bolts</p>
+    
+  </footer>
+</article>
+  
+
+  </div>
+  <div class="footer">
+    
+
+  </div>
+</body>
+</html>

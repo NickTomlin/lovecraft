@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+  <head>
+    
+    <link rel="stylesheet" href="/static/style.css">
+    
+    
+    
+    <script type="text/javascript" src="//use.typekit.net/vio0gns.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    
+    <title>
+
+</title>
+    
+  </head>
+<body>
+  <div class="content">
+    
+  <article class="post">
+  <h1> two minute guide to virtual environments in python</h1>
+  <p>I approached virtual environments with the same attitude I originally aprroached VCS's like Git: distrust. But, after experiencing the freedom to mix and match packages and package versions without the fear of conflicts, and to deploy easily to platforms like Heroku, I can't start a project without them.</p>
+
+<h1>Gettting up and running</h1>
+
+<p>First of all, if you do not have <a href="https://pypi.python.org/pypi/pip">PyPi / Pip</a> installed, you should go and do so. It makes installing python packages easy and fun, and conjures up memories of <a href="https://en.wikipedia.org/wiki/Charles_Dickens">Charles Dickens</a>. Don't tell anyone, but Sometimes I say the package names in English accents for fun when I install them with Pip.</p>
+
+<p>To make a long story short, you should use <a href="https://github.com/brainsik/virtualenv-burrito">virtualenvburrito</a>. It's the simplest way to get up and running, and has a lot of nerd cred right now so you can feel cool about yourself (I did). It will install <a href="http://www.virtualenv.org/en/latest/">virtualenv</a> and <a href="https://bitbucket.org/dhellmann/virtualenvwrapper">virtualenvwrapper</a> in one easy shell command. Due not that if you <strong>do</strong> have virtualenv installed already, you may want to manually install virtualenvwrapper yourself; i've done it both ways without a noticeable difference, but better safe than sorry : )</p>
+
+<h1>Cheat Sheet:</h1>
+
+<ul>
+<li><p>Creating a new Virtual Environment
+-- <code>mkvirtualenv &lt;env-name&gt;</code></p></li>
+<li><p>Switching environemnt
+-- <code>workon &lt;env-name&gt;</code></p></li>
+<li><p>Checking packages
+-- <code>lssitepackages</code></p></li>
+<li><p>Exporting packages
+-- <code>lssitepackages &gt; requirements.txt</code>
+-- To use in another environment:
+--- <code>makvirtualenv &lt;env-name&gt; -r path/to/requirements.txt</code></p></li>
+</ul>
+
+<h1>Rant</h1>
+
+<p>Virtualenv wrapper is fantastic, it takes a lot of the ho-hum out of virtualenv, and makes switching and starting projects a snap. My major beef with it is the way it uses entirely different commands to perform it's major functions. Why I need to remember <code>lssitepackages</code> instead of using <code>venvwrapper ls</code> is beyond me. A short rant, but that's because venv wrapper is such a fantastic tool.</p>
+
+
+  <footer>
+    <p>Category: nuts and bolts</p>
+    
+  </footer>
+</article>
+
+  </div>
+  <div class="footer">
+    
+
+  </div>
+</body>
+</html>
