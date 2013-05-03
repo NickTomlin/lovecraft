@@ -1,0 +1,156 @@
+/* ==========================================================================
+   Tools
+   ========================================================================== */
+
+// BORDER-BOX ALL THE THINGS! (http://paulirish.com/2012/box-sizing-border-box-ftw/)
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing:    border-box;
+  box-sizing:         border-box;
+}
+
+// http://www.zeldman.com/2012/03/01/replacing-the-9999px-hack-new-image-replacement/
+.image-replacement {
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+// Contain floats: nicolasgallagher.com/micro-clearfix-hack/
+.clearfix {
+  zoom: 1;
+  &:before, &:after { content: ""; display: table; }
+  &:after { clear: both; }
+}
+
+/* ==========================================================================
+   Colors
+   ========================================================================== */
+
+$alert-yellow:      #ebe16f;
+$alert-red:         #fbe3e4;
+$alert-green:       #e6efc2;
+$alert-blue:        #d5edf8;
+
+$black:             #000;
+$white:             #fff;
+$teal:                   #bde3cd;
+$gray: #636462;
+$yellow: #DEDB53;
+
+
+$link-color:        darken($teal,5%);
+$link-hover:        darken($link-color, 14%);
+
+/*
+Here's a great tutorial on how to
+use color variables properly:
+http://sachagreif.com/sass-color-variables/
+*/
+
+/* Assorted Variables
+=================================*/
+$section-border-width:.3em;
+
+$sans-serif:        "Helvetica Neue", Helvetica, Arial, sans-serif;
+$serif:            "Georgia", Cambria, Times New Roman, Times, serif;
+$accent:            "samantha",$serif;
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.button, .button:visited {
+  font-family: $sans-serif;
+  border: 1px solid darken($link-color, 13%);
+  border-top-color: darken($link-color, 7%);
+  border-left-color: darken($link-color, 7%);
+  padding: 4px 12px;
+  color: $white;
+  display: inline-block;
+  font-size: 11px;
+  font-weight: bold;
+  text-decoration: none;
+  text-shadow: 0 1px rgba(0,0,0, .75);
+  cursor: pointer;
+  margin-bottom: 20px;
+  line-height: 21px;
+  border-radius: 4px;
+  @include background(linear-gradient($link-color, darken($link-color, 5%)));
+
+
+  &:hover, &:focus {
+    color: $white;
+      border: 1px solid darken($link-color, 13%);
+      border-top-color: darken($link-color, 20%);
+    border-left-color: darken($link-color, 20%);
+    @include background(linear-gradient(darken($link-color, 5%), darken($link-color, 10%)));
+  }
+
+  &:active {
+    @include background(linear-gradient(darken($link-color, 5%), $link-color));
+  }
+}
+
+.blue-button, .blue-button:visited {
+  border-color: darken($alert-blue, 10%);
+  text-shadow: 0 1px 1px darken($alert-blue, 10%);
+  @include background(linear-gradient( $alert-blue, darken($alert-blue, 5%) ));
+  box-shadow: inset 0 0 3px lighten($alert-blue, 16%);
+
+  &:hover, &:focus {
+    border-color: darken($alert-blue, 15%);
+    @include background(linear-gradient( darken($alert-blue, 4%), darken($alert-blue, 10%) ));
+  }
+  &:active {
+    @include background(linear-gradient( darken($alert-blue, 5%), $alert-blue ));
+  }
+}
+/* ==========================================================================
+    Hiding + Showing
+   ================= */
+ /*
+ * Hide only visually, but have it available for screenreaders: h5bp.com/v
+ */
+
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+/* For items to be revealed with JS */
+.hidden {
+  display:none;
+}
+
+/* ==========================================================================
+   Named Media Queries [source](http://css-tricks.com/media-queries-sass-3-2-and-codekit/)
+   ========================================================================== */
+
+$breakpoint-mega:1200px;
+$breakpoint-large: 1080px;
+$breakpoint-medium: 768px;
+$breakpoint-small: 480px;
+// prolly don't need this one
+$breakpoint-mini:210px;
+
+@mixin breakpoint($point){
+  @if $point == large {
+    @media (min-width: $breakpoint-large){ @content; }
+  }
+  @else if $point == medium {
+    @media (min-width: $breakpoint-medium) { @content; }
+  }
+  @else if $point == small {
+    @media (min-width: $breakpoint-small)  { @content; }
+  }
+  @else if $point == mini {
+    @media (min-width: $breakpoint-small)  { @content; }
+  }
+}

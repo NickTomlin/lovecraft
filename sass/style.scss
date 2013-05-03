@@ -1,0 +1,35 @@
+/* ==========================================================================
+   Compass Plugins
+   ========================================================================== */
+// compass imports
+@import "compass/utilities/general/clearfix";
+@import "compass/css3";
+
+/* ==========================================================================
+   Utility
+   ========================================================================== */
+@import "normalize";
+@import "mixins-and-variables";
+@import "no-js";
+
+/* ==========================================================================
+   Main styles bleep
+   ========================================================================== */
+@import "typography";
+@import "base";
+@import "theme";
+
+@media only screen and (min-width: 768px) {
+// 	// import grids
+	@import "grid";
+} // end of media query
+
+/* ==========================================================================
+   Print
+   ========================================================================== */
+
+@media print {
+	@import "print";
+}
+
+@import "ie"; // T_T to be used sparingly with modernizr

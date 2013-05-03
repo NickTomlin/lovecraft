@@ -1,0 +1,160 @@
+html {
+  font-size: 100%;
+  @include breakpoint(small) {
+    font-size:105%;
+  }
+  @include breakpoint(medium) {
+    font-size:114%;
+  }
+  @include breakpoint(large) {
+    font-size: 124%;
+  }
+}
+
+body {
+	font-family: $sans-serif;
+	line-height: 1.4;
+	color: $gray;
+}
+
+/* ==========================================================================
+   LAYOUT & GRID STYLES
+   ========================================================================== */
+
+.wrap {
+	width: 94%;
+	margin: 0 auto;
+  @include clearfix;
+
+  @include breakpoint(medium) {
+    width:87%;
+  }
+
+  @include breakpoint(large) {
+    max-width:1140px;
+  }
+}
+
+
+/* ==========================================================================
+   HEADER SYTLES
+   ========================================================================== */
+
+.header {
+  @include breakpoint(medium) {
+    position:fixed;
+    width:100%;
+    z-index:100;
+  }
+
+  background: rgba(131, 131, 131, 0.82);
+  // font-size: 58%;
+  box-shadow: 1px 1px 1px 1px rgba(131, 131, 131, 0.39);
+  @include legacy-pie-clearfix; // so absolutely positioned drop downs can peek out of their containing element
+
+  nav[role="navigation"] {
+    font-family: $sans-serif;
+    text-transform:uppercase;
+    text-align: center;
+    overflow:visible;// override .wrap
+    @include breakpoint(medium) {
+      text-align: left;
+    }
+    font-size:.7em;
+    li {
+      letter-spacing: -1px;
+       a {
+        color: $yellow;
+      }
+      &:nth-child(odd) {
+        a {
+          color:$teal;
+        }
+      }
+    }
+  }
+
+}// header
+
+/* ==========================================================================
+   NAVIGATION STYLES
+   ========================================================================== */
+.nav {
+	border-bottom: 0;
+  margin:0;
+  overflow:auto;
+
+  @include breakpoint(small) {
+    float:right;
+    text-align: right;
+  }
+
+	li {
+
+    @include clearfix;
+    float:left;
+    width:50%;
+    display: block;
+
+    @include breakpoint(small) {
+      width:auto;
+    }
+
+		a {
+      font-size:1.5em;
+      display:block;
+      padding-left:2%;
+      text-decoration: none;
+      color:$link-color;
+      padding:.5em 0;
+
+
+      @include breakpoint(small) {
+        display:inline-block;
+        font-size:1.2em;
+        width:auto;
+        float:none;
+        text-decoration: none;
+        padding: 10px 10px;
+      }
+
+			&:hover, &:focus {
+        color:lighten($link-color,9%);
+			}
+
+		}
+	} /* end .menu li */
+} /* end .nav */
+
+/* ==========================================================================
+   Container
+   ========================================================================== */
+#content {
+  @include breakpoint(medium) {
+    position: relative;
+    z-index: 90;
+  }
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.footer {
+	clear: both;
+
+
+  nav a {
+    @media (max-width: $breakpoint-medium) {
+      display:block;
+    }
+  }
+
+  a,a:active,a:visited {
+    color:$gray;
+    // this style grouping should be a class
+      text-decoration: underline;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+} // footer
