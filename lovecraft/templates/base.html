@@ -1,18 +1,8 @@
 <!doctype html>
 <html>
   <head>
-    {% block head %}
-    <link rel="stylesheet" href="/static/style.css">
-    {#
-      get some yaml variables passed into template here.
-    #}
-    {% block script %}
-    {# replace  kit id with a meta template tag that pulls from config #}
-    <script type="text/javascript" src="//use.typekit.net/vio0gns.js"></script>
-    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    {% endblock script%}
     <title>{% block title %}{% endblock %}</title>
-    {% endblock %}
+      {% include 'head.html' %}
   </head>
 <body>
   <div class="header">
