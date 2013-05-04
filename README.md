@@ -1,9 +1,25 @@
 Lovecraft: a static site generator so terrifyingly simple that it will shred the last remenants of your tattered mortal pysche.
 
+# Structure
+source
+  - content 
+    - posts
+      - post-title.md
+      - post-title2.md
+    - pages
+      - page1.md
+      - page2.md
+  - static
+    - scss (css / less / stylus ­ handle with plugin?)
+    - js
+    - img
+  - config.yml
+
 # Deps
 
 - Markdown: [Markdown2](https://github.com/trentm/python-markdown2)
 - Templating: [Jinja2](http://jinja.pocoo.org/docs/)
+- Metadata [pyyaml](https://bitbucket.org/xi/pyyaml)
 
 # Inspiration
 
