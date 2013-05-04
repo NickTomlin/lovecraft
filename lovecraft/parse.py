@@ -122,6 +122,8 @@ def format_output_path(dir_name, fname, ext):
     '''(str) (str) (str) -> (str)
     joins dir_name, fname, ext
     and returns a full system path.
+
+    @todo is this even necessary?
     '''
     return os.path.join(dir_name, fname + ext)  # is the '+' concentation too ganky?
 
