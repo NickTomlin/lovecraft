@@ -13,6 +13,12 @@ source
     - scss (css / less / stylus ­ handle with plugin?)
     - js
     - img
+  - views
+    - base.html
+    - single.html
+    - single-post.html
+    - partials
+      - post.html
   - config.yml
 
 # Deps
