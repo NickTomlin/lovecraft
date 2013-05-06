@@ -15,13 +15,14 @@
 /* ==========================================================================
    Main styles bleep
    ========================================================================== */
+@import "typeplate";
 @import "typography";
 @import "base";
 @import "theme";
 
 @media only screen and (min-width: 768px) {
-// 	// import grids
-	@import "grid";
+//  // import grids
+  @import "grid";
 } // end of media query
 
 /* ==========================================================================
@@ -29,7 +30,7 @@
    ========================================================================== */
 
 @media print {
-	@import "print";
+  @import "print";
 }
 
 @import "ie"; // T_T to be used sparingly with modernizr
