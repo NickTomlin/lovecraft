@@ -4,10 +4,30 @@ import os
 import glob
 import shutil
 
+from jinja2 import Environment as JinjaEnvironment, FileSystemLoader
 import markdown2
 import yaml
 
-import template
+
+class Environment():
+    ''' A lovecraft wrapper for jinja2. Provide pluggability and customization
+    without hacking **too** much.
+    '''
+
+    def __init__(self, template_dir='source/templates'):
+        self.template_dir = template_dir
+        self.env = JinjaEnvironment(FileSystemLoader(template_dir))
+
+    def base_test(self):
+        return
+
+    def post(self, post_obj):
+        template = self.env.get_template('post_single.html')
+        return template.render(post=post_obj)
+
+    def index(self, posts_array):
+        template = self.env.get_template('index.html')
+        return template.render(posts=posts_array)
 
 
 def create_posts(source_dir='./posts', output_dir='./build', posts_output_folder='./posts', static='./static', config='./config.yaml'):
@@ -25,8 +45,8 @@ def create_posts(source_dir='./posts', output_dir='./build', posts_output_folder
 
     formatted_posts = []
     ''' @possible Replace with one 'with', using an infile and outfile?
+        @todo move this into a seperate function.
     '''
-    # this could be it's own function? convert posts?
     for post in posts:
         formatted_post = {}
         formatted_post['filename'] = format_title(post)
@@ -43,9 +63,10 @@ def create_posts(source_dir='./posts', output_dir='./build', posts_output_folder
             formatted_post['content'] = parse_markdown(post_body)
 
         formatted_posts.append(formatted_post)
-    '''@Todo: figure out how jekyl/others do post URI
-    is this someting we should do in the first or second loop?
+    ''' Generate a new jinja Environment
     '''
+    template = Environment()
+
     for post in formatted_posts:
         # Destination is .html
         # ./content/formatted/post1.html
