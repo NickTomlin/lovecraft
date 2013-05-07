@@ -2,7 +2,7 @@ from lovecraft import parse
 
 
 def kick_it():
-    parse.create_posts('content/posts', 'build', 'content/posts')
+    parse.create_posts('content/posts', 'build')
 
 
 if __name__ == '__main__':
