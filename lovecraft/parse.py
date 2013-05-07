@@ -7,19 +7,23 @@ import shutil
 from jinja2 import Environment as JinjaEnvironment, FileSystemLoader
 import markdown2
 import yaml
+''' dev '''
+import inspect
 
 
-class Environment():
+class Site():
     ''' A lovecraft wrapper for jinja2. Provide pluggability and customization
     without hacking **too** much.
+
+    @todo: move this into it's own file. Or eliminate it completely ^^
     '''
 
     def __init__(self, template_dir='source/templates'):
         self.template_dir = template_dir
-        self.env = JinjaEnvironment(FileSystemLoader(template_dir))
+        self.env = JinjaEnvironment(loader=FileSystemLoader(template_dir))
 
-    def base_test(self):
-        return
+    def base_test(self, foo):
+        return str(foo) + 'wooot'
 
     def post(self, post_obj):
         template = self.env.get_template('post_single.html')
@@ -30,7 +34,7 @@ class Environment():
         return template.render(posts=posts_array)
 
 
-def create_posts(source_dir='./posts', output_dir='./build', posts_output_folder='./posts', static='./static', config='./config.yaml'):
+def create_posts(source_dir='./posts', output_dir='./build', posts_output_folder='posts', static='./static', config='./config.yaml'):
     ''' (str) (str)
     Given a system path (source_dir):
     1. Look for valid post files with gather_posts (.md)
@@ -39,6 +43,7 @@ def create_posts(source_dir='./posts', output_dir='./build', posts_output_folder
     4. Write formatted posts to file at (posts_output_dir)
 
     @todo this should really be a Class (site), sort of like a Jinja environment.
+    most of the functinoality inside can be broken up into smaller methods
     '''
     posts_output_dir = os.path.join(output_dir, posts_output_folder)
     posts = gather_posts(source_dir)
@@ -47,6 +52,7 @@ def create_posts(source_dir='./posts', output_dir='./build', posts_output_folder
     ''' @possible Replace with one 'with', using an infile and outfile?
         @todo move this into a seperate function.
     '''
+    print(posts)
     for post in posts:
         formatted_post = {}
         formatted_post['filename'] = format_title(post)
@@ -63,19 +69,25 @@ def create_posts(source_dir='./posts', output_dir='./build', posts_output_folder
             formatted_post['content'] = parse_markdown(post_body)
 
         formatted_posts.append(formatted_post)
-    ''' Generate a new jinja Environment
-    '''
-    template = Environment()
+
+    '''@todo create a directory structure'''
+    # http://stackoverflow.com/a/273227/1048479
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    if not os.path.exists(posts_output_dir):
+        os.makedirs(posts_output_dir)
+
+    ''' Copy static files'''
+    # @todo minify
+
+    ''' Generate a new jinja Environment '''
+    template = Site()
+    print(inspect.getmembers(template))
 
     for post in formatted_posts:
-        # Destination is .html
+        # destination is .html
         # ./content/formatted/post1.html
         post_file_path = format_output_path(posts_output_dir, post['filename'], '.html')
-
-        '''@todo create a directory structure'''
-        # # http://stackoverflow.com/a/273227/1048479
-        # if not os.path.exists(output_dir):
-        #     os.makedirs(output_dir)
 
         # Write individual posts
         with codecs.open(post_file_path, 'w') as outfile:
@@ -85,10 +97,7 @@ def create_posts(source_dir='./posts', output_dir='./build', posts_output_folder
     with codecs.open(os.path.join(output_dir, 'index.html'), 'w', encoding='utf8') as indexfile:
         index_template = template.index(formatted_posts)
         indexfile.write(index_template)
-    # Copy static files
-    '''@todo minify'''
-
-    '''@todo create a 'pages' task '''
+    # @todo create a 'pages' task
 
 
 def gather_posts(posts_path):
