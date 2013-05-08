@@ -34,7 +34,7 @@ class Site():
         return template.render(posts=posts_array)
 
 
-def create_posts(source_dir='./posts', output_dir='./build', posts_output_folder='posts', static='./static', config='./config.yaml'):
+def create_posts(source_dir='source', output_dir='build', posts_output_folder='posts', config='config.yaml', static='static'):
     ''' (str) (str)
     Given a system path (source_dir):
     1. Look for valid post files with gather_posts (.md)
