@@ -12,10 +12,8 @@ import inspect
 
 
 class Site():
-    ''' A lovecraft wrapper for jinja2. Provide pluggability and customization
-    without hacking **too** much.
-
-    @todo: move this into it's own file. Or eliminate it completely ^^
+    ''' A general purpose class, to contain all of lovecraft's site creation features.
+    Provides a touchpoint for Jinja2's environment.
     '''
 
     def __init__(self, template_dir='source/templates'):
@@ -25,11 +23,11 @@ class Site():
     def base_test(self, foo):
         return str(foo) + 'wooot'
 
-    def post(self, post_obj):
+    def create_post(self, post_obj):
         template = self.env.get_template('post_single.html')
         return template.render(post=post_obj)
 
-    def index(self, posts_array):
+    def create_index(self, posts_array):
         template = self.env.get_template('index.html')
         return template.render(posts=posts_array)
 
@@ -55,7 +53,6 @@ def create_posts(source_dir='source', output_dir='build', posts_output_folder='p
     ''' @possible Replace with one 'with', using an infile and outfile?
         @todo move this into a seperate function.
     '''
-    print(posts)
     for post in posts:
         formatted_post = {}
         formatted_post['filename'] = format_title(post)
@@ -95,8 +92,8 @@ def create_posts(source_dir='source', output_dir='build', posts_output_folder='p
 
     ''' Generate a new jinja Environment '''
     template = Site()
-    print(inspect.getmembers(template))
 
+    ''' Write Posts / Index '''
     for post in formatted_posts:
         # destination is .html
         # ./content/formatted/post1.html
@@ -104,13 +101,15 @@ def create_posts(source_dir='source', output_dir='build', posts_output_folder='p
 
         # Write individual posts
         with codecs.open(post_file_path, 'w') as outfile:
-            post_template = template.post(post)
+            post_template = template.create_post(post)
             outfile.write(post_template)
+    print('Wrote %s posts' % len(formatted_posts))
     # write index
     with codecs.open(os.path.join(output_dir, 'index.html'), 'w', encoding='utf8') as indexfile:
-        index_template = template.index(formatted_posts)
+        index_template = template.create_index(formatted_posts)
         indexfile.write(index_template)
     # @todo create a 'pages' task
+    print('Site Build Complete')
 
 
 def gather_posts(posts_path):
