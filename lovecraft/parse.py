@@ -46,7 +46,10 @@ def create_posts(source_dir='source', output_dir='build', posts_output_folder='p
     most of the functinoality inside can be broken up into smaller methods
     '''
     posts_output_dir = os.path.join(output_dir, posts_output_folder)
-    posts = gather_posts(source_dir)
+    posts_gather_path = os.path.join(source_dir, 'content/posts')
+
+    print('Looking for posts in %s' % posts_gather_path)
+    posts = gather_posts(posts_gather_path)
 
     formatted_posts = []
     ''' @possible Replace with one 'with', using an infile and outfile?
