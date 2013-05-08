@@ -73,15 +73,25 @@ def create_posts(source_dir='source', output_dir='build', posts_output_folder='p
 
         formatted_posts.append(formatted_post)
 
-    '''@todo create a directory structure'''
-    # http://stackoverflow.com/a/273227/1048479
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-    if not os.path.exists(posts_output_dir):
-        os.makedirs(posts_output_dir)
+    ''' Prepare build folder / static files
+    1. Clean build directory.
+    2. Recreate Build directory.
+    3. Create post directory.
+    4. Copy Static Files.
+
+    @todo move into Site.ready_build_directory()
+    '''
+    shutil.rmtree(output_dir)
+
+    # create build post directory
+    os.makedirs(output_dir)
+    os.makedirs(posts_output_dir)
 
     ''' Copy static files'''
-    # @todo minify
+    static_src = os.path.join(source_dir, static)
+    static_dest = os.path.join(output_dir, static)
+
+    shutil.copytree(static_src, static_dest)
 
     ''' Generate a new jinja Environment '''
     template = Site()
