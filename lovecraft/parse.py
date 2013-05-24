@@ -31,6 +31,11 @@ class Site():
         template = self.env.get_template('index.html')
         return template.render(posts=posts_array)
 
+    def copy_files(self):
+        ''' Make/Clean build folders and copy static files
+        '''
+        pass
+
 
 def create_posts(source_dir='source', output_dir='build', posts_output_folder='posts', config='config.yaml', static='static'):
     ''' (str) (str)
