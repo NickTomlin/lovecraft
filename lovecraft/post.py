@@ -7,10 +7,9 @@ class Post(object):
     def __init__(self, title="New Post " + str(date.today())):
         super(Post, self).__init__()
         self.title = title + " " + str(date.today())
-        self.content = """
-        Title: %s
-        Category:
-        Tags:
-
-        ----
+        # this is wonky, find a better way to format it
+        self.content = """Title: %s
+Category:
+Tags:
+----
         """ % self.title
