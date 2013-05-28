@@ -93,8 +93,8 @@ class Site():
         # meta
         self.config_file = config_file
 
-        self.gather_meta()
-        self.env = JinjaEnvironment(loader=FileSystemLoader(self.template_dir))
+        '''@future '''
+        # self.gather_meta()
 
     def base_test(self, foo):
         ''' Sanity Check
