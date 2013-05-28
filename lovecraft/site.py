@@ -96,7 +96,7 @@ class Site():
         '''@future '''
         # self.gather_meta()
 
-    def base_test(self, foo):
+    def base_test(self):
         ''' Sanity Check
         '''
         return True
