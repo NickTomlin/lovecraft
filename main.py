@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from lovecraft import parse
+from lovecraft import site
 from lovecraft import post
 import argparse
 from os import path
