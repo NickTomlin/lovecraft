@@ -70,7 +70,23 @@ def test_sanity():
 
 def test_init_defaults():
     new_site = site.Site()
-    assert new_site.config == 'config.yaml'
+    assert new_site.config_file == 'config.yaml', 'Default option not set'
+
+
+def test_set_options():
+    new_site = site.Site(input_dir=source_dir)
+    assert new_site.input_dir == source_dir, 'Provided Custom option not set'
+
+
+def test_set_and_default():
+    new_site = site.Site(input_dir=source_dir)
+    assert new_site.input_dir == source_dir and new_site.config_file == 'config.yaml', 'Default and Custom option not properly set'
+
+
+def test_default_source_path():
+    new_site = site.Site()
+    assert new_site.posts_source_path == 'source/content/posts', 'Incorrect default source path: %s ' % new_site.posts_source_path
+
 
 
 # def test_markdown():
