@@ -27,8 +27,37 @@ posts_dir = os.path.join(source_dir, 'posts')
 def test_gather_markdown():
     #  use our test directory or it will FREAK out
     result = site.gather_markdown(posts_dir)
-    assert len(result) == 2, 'gather did not collect correct number of posts, expected 5, got %s' % len(result)
+    assert len(result) == 3, 'gather did not collect correct number of posts, expected 4, got %s' % len(result)
 
+
+def test_get_yaml():
+    yaml_file = os.path.join(posts_dir, 'yaml.md')
+    with open(yaml_file, 'r') as source:
+        yaml = site.get_yaml(source.read())
+
+    assert yaml['title'] == 'Title works', 'Yaml did not load correctly'
+
+
+def test_format_title():
+    path = 'test/posts/post1.md'
+    title = site.format_title(path)
+
+    assert title == 'post1', 'site.format_title did did not produce expected result, gave: %s got: %s' % (path, title)
+
+
+def test_format_abnormal_title():
+    path = 'test/posts/title\ 2013-05-28.md'
+    title = site.format_title(path)
+    expected = r'title\ 2013-05-28'
+
+    assert title == expected, 'site.format_title did did not produce expected result, gave: %s expected: %s got: %s' % (path, expected, title)
+
+
+def test_format_output_path():
+    formatted = site.format_output_path('posts', 'post2', '.md')
+    expected = 'posts/post2.md'
+
+    assert formatted == expected, 'format_output_path did not properly format path: got %s'
 
 ''' Test Site object
 '''
