@@ -15,6 +15,11 @@ def test(args):
     print("it's working")
 
 
+def build_site(args):
+    pass
+    # site.build_site()
+
+
 def create_post(args):
 
     new_post = Post(args.title[0])
@@ -60,7 +65,6 @@ if __name__ == '__main__':
         help="Create a new post, with a title you specify, or a default date hash",
         nargs=1
     )
-
     parser_post.set_defaults(func=create_post)
 
     parser_build = subparsers.add_parser('build')
@@ -68,10 +72,11 @@ if __name__ == '__main__':
         "build",
         help="Generates a static copy of blog"
     )
-    parser_build.set_defaults(func=create_post)
+    parser_build.set_defaults(func=build_site)
 
     parser.test = subparsers.add_parser('test')
     parser.test.set_defaults(func=test)
 
+    # Assign the function specified in .set_default to execute when arg is called
     args = parser.parse_args()
     args.func(args)
