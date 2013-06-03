@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from lovecraft import site
-from lovecraft import post
+from lovecraft.content import Post
+from lovecraft import util
 import argparse
 from os import path
 
@@ -16,8 +17,8 @@ def test(args):
 
 def create_post(args):
 
-    new_post = post.Post(args.title[0])
-    post_path = path.join('source/content/posts', new_post.title)
+    new_post = Post(args.title[0])
+    post_path = path.join('source/content/posts', util.get_safe_pathname(new_post.title) + '.md')
 
     with open(post_path, 'w') as outfile:
         try:
