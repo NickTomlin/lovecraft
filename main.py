@@ -17,7 +17,7 @@ def test(args):
 def create_post(args):
 
     new_post = post.Post(args.title[0])
-    post_path = path.join('source/content/posts', new_post.title + '.md')
+    post_path = path.join('source/content/posts', new_post.title)
 
     with open(post_path, 'w') as outfile:
         try:
