@@ -18,7 +18,7 @@ class Post(Content):
         self.content = """Title: %s
 Category:
 Tags:
-----
+---
 """ % self.title
 
     def render(self, template):
