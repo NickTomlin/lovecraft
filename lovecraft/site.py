@@ -93,11 +93,12 @@ class Site():
         self.posts_dir = 'content/posts'
         self.static_dir = static_dir
 
-        # computed paths
-        self.posts_source_path = os.path.join(input_dir, self.posts_dir)
-        self.posts_dest_path = os.path.join(output_dir, self.posts_dir)
-        self.static_source_path = os.path.join(input_dir, self.static_dir)
-        self.static_dest_path = os.path.join(output_dir, self.static_dir)
+        # joined paths
+        self.template_dir = os.path.join(self.input_dir, template_dir)  # source/templates
+        self.posts_source_path = os.path.join(self.input_dir, self.posts_dir)  # source/content/posts
+        self.posts_dest_dir = os.path.join(self.output_dir, self.posts_dir)  # build/content/posts
+        self.static_source_path = os.path.join(self.input_dir, self.static_dir)  # source/static
+        self.static_dest_path = os.path.join(self.output_dir, self.static_dir)  # build/static
 
         # meta
         self.config_file = config_file
@@ -148,29 +149,32 @@ class Site():
         shutil.copytree(self.static_source_path, self.static_dest_path)
 
     def gather_content(self):
-        ''' Gathers site content, appends a list of post dictionaries to self.formatted_posts
+        ''' Gathers site content, appends a list of post dictionaries to self.posts
         Given a system path (source_dir):
-        1. Look for valid post files with gather_posts (.md)
+        1. Look for valid post files with gather_markdown (.md)
         2. Grab post 'name' from filename (replace with metadata later on) in post['title]
         3. Convert post content into markdown and store in post['content']
         '''
         # @todo rename this throughout function to just use self.<property>
-        posts_output_dir = self.posts_source_path
-        posts_gather_path = self.posts_dest_path
+        posts_output_dir = self.posts_dest_dir
+        posts_gather_path = self.posts_source_path
 
-        print('Looking for posts in %s' % posts_gather_path)
-        posts = gather_posts(posts_gather_path)
+        # print('Looking for posts in %s' % posts_gather_path)
+        raw_post_files = gather_markdown(posts_gather_path)
 
-        self.formatted_posts = []
+        print (raw_post_files)
+
+        # consider using this locally, then returning an array (better for testing?)
+        formatted_posts = []
         ''' @possible Replace with one 'with', using an infile and outfile?
             @todo move this into a seperate function.
         '''
-        for post in posts:
+        for raw_post in raw_post_files:
             formatted_post = {}
-            formatted_post['filename'] = format_title(post)
-            formatted_post['href'] = format_output_path(posts_output_folder, formatted_post['filename'], '.html')
+            formatted_post['filename'] = format_title(raw_post)
+            formatted_post['href'] = format_output_path(posts_output_dir, formatted_post['filename'], '.html')  # build/content/posts/post.html
 
-            with open(post, 'r') as input_file:
+            with open(raw_post, 'r') as input_file:
                 contents = input_file.read()
 
                 split_content = contents.split('\n---\n')
@@ -178,35 +182,31 @@ class Site():
                 post_body = ''.join(split_content[1:])
 
                 formatted_post['meta'] = get_yaml(post_header)
-                formatted_post['content'] = markdown2.markdown(markdown_string)
+                formatted_post['content'] = markdown2.markdown(post_body)
+                formatted_posts.append(formatted_post)
 
-            self.formatted_posts.append(formatted_post)
+        # see above comment @ self.posts = []
+        self.posts = formatted_posts
 
     def create(self):
         ''' Returns nothing.
         Write gathered posts/pages to build directory
         @todo use post.py's Post()
         '''
-        for post in self.formatted_posts:
+
+        self.env = JinjaEnvironment(loader=FileSystemLoader(self.template_dir))
+
+        for post in self.posts:
             # destination is .html
             # ./content/formatted/post1.html
-            post_file_path = format_output_path(posts_output_dir, post['filename'], '.html')
+            post_file_dir = format_output_path(self.posts_dest_dir, post['filename'], '.html')  # content/posts
 
-            # Write individual posts
-            with codecs.open(post_file_path, 'w') as outfile:
-                post_template = site.create_post(post)
-                outfile.write(post_template)
-        print('Wrote %s posts' % len(formatted_posts))
-        # write index
-        with codecs.open(os.path.join(output_dir, 'index.html'), 'w', encoding='utf8') as indexfile:
-            index_template = site.create_index(formatted_posts)
-            indexfile.write(index_template)
+            with codecs.open(post_file_dir, 'w') as outfile:
+                outfile.write(self.create_post(post))
+
+        print('Wrote %s posts' % len(self.posts))
+
+        with codecs.open(os.path.join(self.output_dir, 'index.html'), 'w', encoding='utf8') as indexfile:
+            indexfile.write(self.create_index(self.posts))
         # @todo create a 'pages' task
         print('Site Build Complete')
-
-
-if __name__ == '__main__':
-    new_site = Site()
-    new_site.gather_content()
-    new_site.ready_build_directory()
-    new_site.create()
