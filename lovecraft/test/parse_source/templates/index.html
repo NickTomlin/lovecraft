@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+  {% block title %}
+  Pyblog – Journey into Madness
+  {% endblock title %}
+
+{%block content%}
+  {% for post in posts %}
+    {% include 'post.html' %}
+    {#
+    replace this with a more nuanced thing?
+    #}
+    <a href="{{ post.href }}">Read More</a>
+  {% endfor %}
+{%endblock content %}
+
+{%block footer %}
+{% endblock footer %}
