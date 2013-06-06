@@ -11,6 +11,15 @@ import yaml
 import inspect
 
 
+def build_site():
+    ''' Wraps all the functionality of Site
+    into a single call. Is ugly. Baugh.
+    '''
+    new_site = Site()
+    new_site.gather_content()
+    new_site.ready_build_directory()
+    new_site.create()
+
 def get_yaml(text_source):
     ''' (str) -> {'meta_attribute' : 'meta_key', ...}
     Takes a section of YAML and returns a dictionary of keyed metadata
