@@ -16,8 +16,7 @@ def test(args):
 
 
 def build_site(args):
-    pass
-    # site.build_site()
+    site.build_site()
 
 
 def create_post(args):
@@ -37,15 +36,14 @@ if __name__ == '__main__':
     ''' Parse arguements using builtin argparse module.
 
     1. Clean @todo
-    2. Build @todo
+    2. Build
     3. Preview @todo
         - how to do this?
-            - bottl mini-server?
             - http mini-server?
-        - how to live-reload?
-            - guard?
+        - how to detect file system events?
+            - watchdog?
     4. Content types @todo
-    5. New Post @doing
+    5. New Post
 
 
     Note: argparse is python 2.7+, so we may want to fallback/switch to another method (getopt, for example)
@@ -68,10 +66,6 @@ if __name__ == '__main__':
     parser_post.set_defaults(func=create_post)
 
     parser_build = subparsers.add_parser('build')
-    parser_build.add_argument(
-        "build",
-        help="Generates a static copy of blog"
-    )
     parser_build.set_defaults(func=build_site)
 
     parser.test = subparsers.add_parser('test')
