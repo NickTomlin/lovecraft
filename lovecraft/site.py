@@ -148,30 +148,20 @@ class Site():
         shutil.copytree(self.static_source_path, self.static_dest_path)
 
     def gather_content(self):
-        ''' Gathers site content, appends a list of post dictionaries to self.posts
-        Given a system path (source_dir):
-        1. Look for valid post files with gather_markdown (.md)
-        2. Grab post 'name' from filename (replace with metadata later on) in post['title]
-        3. Convert post content into markdown and store in post['content']
+        ''' gathers site content, appends a list of post dictionaries to self.posts
+        given a system path (source_dir):
+        1. look for valid post files with gather_markdown (.md)
+        2. grab post 'name' from filename (replace with metadata later on) in post['title]
+        3. convert post content into markdown and store in post['content']
         '''
-        # @todo rename this throughout function to just use self.<property>
-        posts_output_dir = self.posts_dest_dir
-        posts_gather_path = self.posts_source_path
+        raw_post_files = gather_markdown(self.posts_source_path)
 
-        # print('Looking for posts in %s' % posts_gather_path)
-        raw_post_files = gather_markdown(posts_gather_path)
-
-        print (raw_post_files)
-
-        # consider using this locally, then returning an array (better for testing?)
         formatted_posts = []
-        ''' @possible Replace with one 'with', using an infile and outfile?
-            @todo move this into a seperate function.
-        '''
+
         for raw_post in raw_post_files:
             formatted_post = {}
             formatted_post['filename'] = format_title(raw_post)
-            formatted_post['href'] = format_output_path(posts_output_dir, formatted_post['filename'], '.html')  # build/content/posts/post.html
+            formatted_post['href'] = format_output_path(self.posts_dir, formatted_post['filename'], '.html')  # build/content/posts/post.html
 
             with open(raw_post, 'r') as input_file:
                 contents = input_file.read()
@@ -184,7 +174,6 @@ class Site():
                 formatted_post['content'] = markdown2.markdown(post_body)
                 formatted_posts.append(formatted_post)
 
-        # see above comment @ self.posts = []
         self.posts = formatted_posts
 
     def create(self):
