@@ -16,24 +16,49 @@ tags: tips
 category: Testing
 '''
 
+''' dummy content '''
+test_posts = [
+    {
+        'meta':  {'title': 'test1', 'category': 'tests'},
+        'filename': 'test1.md',
+        'href': 'build/content/posts/test1.html',
+        'contents': '<h1> test post </h1>'
+    },
+    {
+        'meta':  {'title': 'test2', 'category': 'tests', 'foo': 'bar'},
+        'filename': 'test2.md',
+        'href': 'build/content/posts/',
+        'contents': '<h1> test post 2 </h1>'
+    }
+]
+
 
 ''' Test Helpers
 '''
 
-source_dir = 'test/parse_source'
-posts_dir = os.path.join(source_dir, 'posts')
+test_source_dir = 'test/parse_source'
+test_output_dir = 'test/parse_results'
+
+posts_dir = os.path.join(test_source_dir, 'content', 'posts')
+posts_output_dir = os.path.join(test_output_dir, 'content', 'posts')
+
+# holds improperly formatted files for comparison
+broken_dir = os.path.join(test_source_dir, 'broken')
 
 
 def test_gather_markdown():
     #  use our test directory or it will FREAK out
     result = site.gather_markdown(posts_dir)
-    assert len(result) == 3, 'gather did not collect correct number of posts, expected 4, got %s' % len(result)
+    assert isinstance(result, list), 'result is not a list'
+    assert len(result) == 2, 'gather did not collect correct number of posts, expected 4, got %s' % len(result)
 
 
 def test_get_yaml():
-    yaml_file = os.path.join(posts_dir, 'yaml.md')
+    yaml_file = os.path.join(test_source_dir, 'yaml.md')
+    # this is a ganky way of testing. We need another method that does this?
     with open(yaml_file, 'r') as source:
-        yaml = site.get_yaml(source.read())
+        split = source.read().split('\n---\n')
+        yaml = site.get_yaml(split[0])
 
     assert yaml['title'] == 'Title works', 'Yaml did not load correctly'
 
@@ -74,13 +99,13 @@ def test_init_defaults():
 
 
 def test_set_options():
-    new_site = site.Site(input_dir=source_dir)
-    assert new_site.input_dir == source_dir, 'Provided Custom option not set'
+    new_site = site.Site(input_dir=test_source_dir)
+    assert new_site.input_dir == test_source_dir, 'Provided Custom option not set'
 
 
 def test_set_and_default():
-    new_site = site.Site(input_dir=source_dir)
-    assert new_site.input_dir == source_dir and new_site.config_file == 'config.yaml', 'Default and Custom option not properly set'
+    new_site = site.Site(input_dir=test_source_dir)
+    assert new_site.input_dir == test_source_dir and new_site.config_file == 'config.yaml', 'Default and Custom option not properly set'
 
 
 def test_default_source_path():
@@ -88,6 +113,35 @@ def test_default_source_path():
     assert new_site.posts_source_path == 'source/content/posts', 'Incorrect default source path: %s ' % new_site.posts_source_path
 
 
+def test_gather_content():
+    new_site = site.Site(input_dir=test_source_dir, output_dir=test_output_dir)
+    new_site.gather_content()
+
+    assert len(new_site.posts) > 1, 'did not gather content'
+
+
+def test_ready_build_directory():
+    test_file = os.path.join(test_output_dir, 'foo.txt')
+    test_dir = os.path.join(test_output_dir, 'blazdir')
+
+    with open(test_file, 'w') as outfile:
+        outfile.write('I am foo')
+
+    if not os.path.exists(test_dir):
+        os.makedirs(test_dir)
+
+    new_site = site.Site(input_dir=test_source_dir, output_dir=test_output_dir)
+    new_site.ready_build_directory()
+
+    assert not os.path.isfile(test_file), 'ready_build_directory did not remove old files'
+    assert not os.path.exists(test_dir), 'ready_build did not remove directories'
+
+
+def test_create():
+    new_site = site.Site(input_dir=test_source_dir, output_dir=test_output_dir)
+    new_site.gather_content()
+    new_site.ready_build_directory()
+    new_site.create()
 
 # def test_markdown():
 #     '''@todo add a dictionary of markdown here?
