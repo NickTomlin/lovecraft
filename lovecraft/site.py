@@ -85,9 +85,8 @@ class Site():
     Also provides a touchpoint for Jinja2's environment in the site.env property
     '''
 
-    def __init__(self, template_dir='source/templates', input_dir='source', output_dir='build', static_dir='static', config_file='config.yaml'):
+    def __init__(self, input_dir='source', template_dir='templates', output_dir='build', static_dir='static', config_file='config.yaml'):
         # base paths
-        self.template_dir = template_dir
         self.output_dir = output_dir
         self.input_dir = input_dir
         self.posts_dir = 'content/posts'
