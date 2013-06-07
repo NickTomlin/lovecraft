@@ -2,7 +2,7 @@ Lovecraft: a static site generator so terrifyingly simple that it will shred the
 
 # Structure
 source
-  - content 
+  - content
     - posts
       - post-title.md
       - post-title2.md
@@ -13,9 +13,9 @@ source
     - scss (css / less / stylus ­ handle with plugin?)
     - js
     - img
-  - views
+  - templates
     - base.html
-    - single.html
+    - single.html (prolly should be "page")
     - single-post.html
     - partials
       - post.html
@@ -47,19 +47,18 @@ source
 ## V 0.0
 - Converts posts to markdown
 -- Including metadata
-- Lists # of posts in config file on main page
 - Links static CSS/JS
-- Some sort of testing
+- Some sort of test coverage
+- Command line utility
 
 # Roadmap
 
 ## V 0.1
 - Assembles posts into archive page
-- Compresses / minifies CSS/JS
+- compress / minify static assets?
+- better checks for URL safe post href's
 
 # Science Fiction
-- CLI utility using [paver](http://paver.github.io/paver/)?
--- functionality like "lovecraft new post"
 - Syntax Highlighting
 - Custom content/post types
 - Author profile
