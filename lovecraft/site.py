@@ -3,6 +3,7 @@ import codecs
 import os
 import glob
 import shutil
+import datetime
 
 from jinja2 import Environment as JinjaEnvironment, FileSystemLoader
 import markdown2
@@ -20,14 +21,39 @@ def build_site():
     new_site.ready_build_directory()
     new_site.create()
 
+
+def split_yaml_and_content(raw_text):
+
+    ''' (str) -> {'meta_attribute' : 'meta_key', ...}, (str)
+    Given a document with a yaml header (signified by '---'):
+
+    1. Strip off the header information before '---'
+    2. Grab the rest of the document afterwards
+    3. Process the first one as YAML
+
+    Return the processed yaml, and the unformatted "body"
+
+    '''
+
+    split = raw_text.split('\n---\n')
+    header = split[0]
+    body = split[0:]
+
+    # @borked yaml.load works on plain text so we need a way of testing if
+    # if it has actually generated yaml
+    parsed_yaml = get_yaml(header)
+
+    return parsed_yaml, body
+
+
 def get_yaml(text_source):
     ''' (str) -> {'meta_attribute' : 'meta_key', ...}
     Takes a section of YAML and returns a dictionary of keyed metadata
 
     @borked This function doesn't have much a a purpose now that we've
     removed the .strip('\n---\n')  part from it. Is it redundant?
+    @todo make this more hookable, in order to use differnt meta?
     '''
-
     # @borked yaml.load works on plain text so we need a way of testing if
     # if it has actually generated yaml
     parsed_meta = yaml.load(text_source)
@@ -37,14 +63,14 @@ def get_yaml(text_source):
     return parsed_meta
 
 
-def gather_posts(posts_path):
+def gather_markdown(markdown_path):
     ''' (str) -> (list) of ['system/path']
     Takes a system path string, and returns a list
     of "valid" non absolute paths to posts
     ['test/posts/post1.md', 'test/posts/post_0.md', 'test/posts/post_2.md', 'test/posts/post_3.md']
     '''
     # this fails if path does not exist from CWD of parse, check for this?
-    path = os.path.join(posts_path, '*.md')
+    path = os.path.join(markdown_path, '*.md')
     posts = glob.glob(path)  # "pythonic", but possibly unreliable across oses replace with a regex?
     return posts
 
@@ -52,7 +78,7 @@ def gather_posts(posts_path):
 def format_title(post_path):
     ''' (str) -> (str)
     Given a string like 'test/posts/post1.md',
-    return the post name without the system path
+    return the post name without the system path for printing in HTML
     '''
     # split on '/' (hopefully this is okay with windows paths?)
     # since the file name is at the end of a path, we just grab that
@@ -129,19 +155,28 @@ class Site():
         template = self.env.get_template('index.html')
         return template.render(posts=posts_array)
 
+    def sort_posts(self):
+        def sort_with_none(post):
+            if 'date' in post:
+                return datetime.datetime.strptime(post['date'], '%Y-%m-%d')
+
+            # if not, just send the post to the "bottom"
+            return datetime.datetime(1978, 1, 1)
+
+        self.posts.sort(key=sort_with_none, reverse=True)
+
     def ready_build_directory(self):
         ''' Prepare build folder / static files
-        1. Clean build directory.
+        1. Remove build directory
         2. Recreate Build directory.
         3. Create post directory.
         4. Copy Static Files.
-        @borked, need to find a way to format options
         '''
         shutil.rmtree(self.output_dir)
 
         # create build post directory
         os.makedirs(self.output_dir)
-        os.makedirs(self.posts_dest_path)
+        os.makedirs(self.posts_dest_dir)
 
         ''' Copy static files'''
 
@@ -183,6 +218,7 @@ class Site():
         '''
 
         self.env = JinjaEnvironment(loader=FileSystemLoader(self.template_dir))
+        self.sort_posts()  # sorts in place
 
         for post in self.posts:
             # destination is .html

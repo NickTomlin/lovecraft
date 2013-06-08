@@ -19,17 +19,34 @@ category: Testing
 ''' dummy content '''
 test_posts = [
     {
-        'meta':  {'title': 'test1', 'category': 'tests'},
-        'filename': 'test1.md',
-        'href': 'build/content/posts/test1.html',
-        'contents': '<h1> test post </h1>'
-    },
-    {
         'meta':  {'title': 'test2', 'category': 'tests', 'foo': 'bar'},
         'filename': 'test2.md',
         'href': 'build/content/posts/',
-        'contents': '<h1> test post 2 </h1>'
+        'contents': '<h1> test post 2 </h1>',
+        'date': '2012-10-22'
+    },
+    {
+        'meta':  {'title': 'test1', 'category': 'tests'},
+        'filename': 'test1.md',
+        'href': 'build/content/posts/test1.html',
+        'contents': '<h1> test post </h1>',
+        'date': '2012-10-20'
+    },
+    {
+        'meta':  {'title': 'test4', 'category': 'tests', 'extra': 'meta'},
+        'filename': 'test2.md',
+        'href': 'build/content/posts/',
+        'contents': '<h1> test post 2 </h1>',
+        'date': '2013-10-22'
+    },
+    {
+        'meta':  {'title': 'test4', 'category': 'tests', 'extra': 'meta'},
+        'filename': 'no-date.md',
+        'href': 'build/content/posts/',
+        'contents': '<h1> test post 2 </h1>',
+        # missing date, take that!
     }
+
 ]
 
 
@@ -61,6 +78,16 @@ def test_get_yaml():
         yaml = site.get_yaml(split[0])
 
     assert yaml['title'] == 'Title works', 'Yaml did not load correctly'
+
+
+def test_sort_posts():
+    new_site = site.Site()
+    new_site.posts = test_posts
+    new_site.sort_posts()
+    print [post for post in new_site.posts]
+    # this is ganky :(
+    assert new_site.posts[0]['date'] == '2013-10-22', 'sort did not reverse posts'
+    assert new_site.posts[-1]['filename'] == 'no-date.md', 'sort did not correctly handle a post without a date'
 
 
 def test_format_title():
@@ -142,6 +169,7 @@ def test_create():
     new_site.gather_content()
     new_site.ready_build_directory()
     new_site.create()
+    # how to test this? LXML?
 
 # def test_markdown():
 #     '''@todo add a dictionary of markdown here?
