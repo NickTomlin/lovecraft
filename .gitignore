@@ -1,3 +1,3 @@
 build
 inspiration
-source/content/posts
+source/content/posts/*.md
